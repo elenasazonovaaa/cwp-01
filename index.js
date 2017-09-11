@@ -1,2 +1,4 @@
-const name = process.argv[2];
-console.log(`Hello ${name}!`);
+for(var i = 0; i < process.argv.length; i++)
+{
+ console.log(process.argv[i]);
+}
