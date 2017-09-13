@@ -2,19 +2,38 @@
 var fs = require('fs');
 var path = require('path');
 
-var pathD = process.argv[2];
+var pathDirectory = process.argv[2];
 
-var stringScript = "";
-if (pathD != undefined){
+var stringScript = "\
+var fs = require('fs');\n\
+var path = require('path');\n\
+var pathDirectory = '" + pathDirectory.replace(/\\/gi, '/') + "/' \n\
+function readDir(base){\n \
+    fs.readdir(base, function(err, files){\n \
+        files.forEach(function(item){ \n\
+            fs.stat(base + '/' + item, function(err, state){\n \
+                if(state.isDirectory()){\n \
+                    localBase = base + '/' + item;\n \
+                    readDir(localBase);\n \
+                } else {\n \
+                    console.log(path.relative(pathDirectory, base + '/' + item));\n \
+                } \n \
+            });\n \
+        });\n \
+    });}\n\n\
+readDir(pathDirectory); \n\
+  ";
 
-    fs.stat(pathD, function(err, stats) {
+if (pathDirectory != undefined){
+
+    fs.stat(pathDirectory, function(err, stats) {
 
         if (err || !(stats.isDirectory())) {
             console.error("Неверный путь!");
         }
         else {
 
-            fs.writeFile(pathD + '\\summary.js', stringScript, function(error){
+            fs.writeFile(pathDirectory + '\\summary.js', stringScript, function(error){
                 if (error)
                     console.error("Ошибка создания файла!");
             });
