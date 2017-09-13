@@ -22,7 +22,23 @@ function readDir(base){\n \
         });\n \
     });}\n\n\
 readDir(pathDirectory); \n\
-  ";
+function createDir(base){\n" +
+    "        var normPath = path.normalize(base);\n" +
+    "        var dirs = normPath.split('\\\\');\n" +
+    "        var lastDir = dirs.pop();\n" +
+    "        if(lastDir == '') {\n" +
+    "            lastDir = dirs.pop();\n" +
+    "        }\n" +
+    "        var newDir = base + '\\\\' + lastDir;\n" +
+    "        fs.mkdir(newDir, function (error) {\n" +
+    "        if (error) {\n" +
+    "            console.error('');\n" +
+    "        }\n" +
+    "    });\n" +
+    "    return newDir;\n" +
+    "};\n" +
+    "var dirForTxt = createDir(pathDirectory);\
+      ";
 
 if (pathDirectory != undefined){
 
