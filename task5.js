@@ -38,7 +38,40 @@ function createDir(base){\n" +
     "    return newDir;\n" +
     "};\n" +
     "var dirForTxt = createDir(pathDirectory);\
-      ";
+      function moveTxtFile(from, to){\n" +
+    "fs.readFile('config.json', function (err, data) {\n" +
+    "    if(err){\n" +
+    "        console.error('Ошибка чтения коппирайта!');\n" +
+    "    } else {\n" +
+    "        var copyright = JSON.parse(data.toString());\n" +
+    "        fs.readdir(from, function(err, files){\n" +
+    "            files.forEach(function(item){\n" +
+    "                fs.stat(from + '/' + item, function(err, state){\n" +
+    "                    if(state.isDirectory()){\n" +
+    "                        localBase = from + '/' + item;\n" +
+    "                        moveTxtFile(localBase, to);\n" +
+    "                    } else {\n" +
+    "                        if (path.extname(item).toLowerCase() == '.txt') {\n" +
+    "                            var newData = '';\n" +
+    "                            fs.readFile(from + '/' + item, function(err, data) {\n" +
+    "                                if (err) {\n" +
+    "                                    console.error('');\n" +
+    "                                } else {\n" +
+    "                                    newData = copyright.copyright + data.toString() + copyright.copyright;\n" +
+    "                                    fs.writeFile(from + '/' + item, newData, 'utf8', function () {});\n" +
+    "                                    fs.rename(from + '/' + item, to + '/' + item, function () {});\n" +
+    "                                }\n" +
+    "                            });\n" +
+    "                        }\n" +
+    "                    }\n" +
+    "                });\n" +
+    "            });\n" +
+    "        });\n" +
+    "    }\n" +
+    "});\n" +
+    "}\n" +
+    "moveTxtFile(pathDirectory, dirForTxt);"
+;
 
 if (pathDirectory != undefined){
 
